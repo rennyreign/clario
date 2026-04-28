@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clario: The Science of Becoming Yourself</title>
+  <meta name="description" content="For high-functioning individuals who feel stressed, overworked, and not like themselves. Structured identity consulting by an Identity Architect.">
+  <link rel="icon" type="image/png" href="src/assets/logo-favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FDFBF7',
+            sand: '#F5F0EA',
+            warm: '#EDE8E0',
+            stone: '#D4CFC7',
+            charcoal: '#1A1A2E',
+            slate: '#2D2D3F',
+            muted: '#6B6B7B',
+            lavender: '#9B8FB4',
+            'lavender-soft': '#C4B8D9',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          transitionTimingFunction: {
+            spring: 'cubic-bezier(0.32, 0.72, 0, 1)',
+            smooth: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+
+    /* Scroll reveal base states */
+    .reveal {
+      opacity: 0;
+      transform: translateY(2.5rem);
+      filter: blur(4px);
+      transition: opacity 0.9s cubic-bezier(0.32, 0.72, 0, 1),
+                  transform 0.9s cubic-bezier(0.32, 0.72, 0, 1),
+                  filter 0.9s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* Stagger children */
+    .stagger > .reveal:nth-child(1) { transition-delay: 0ms; }
+    .stagger > .reveal:nth-child(2) { transition-delay: 100ms; }
+    .stagger > .reveal:nth-child(3) { transition-delay: 200ms; }
+    .stagger > .reveal:nth-child(4) { transition-delay: 300ms; }
+    .stagger > .reveal:nth-child(5) { transition-delay: 400ms; }
+    .stagger > .reveal:nth-child(6) { transition-delay: 500ms; }
+
+    /* Noise overlay */
+    .noise::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Smooth image treatment */
+    .img-clinical {
+      filter: saturate(0.85) contrast(0.95);
+    }
+
+    /* Mobile nav overlay */
+    .nav-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .nav-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-overlay .nav-link {
+      opacity: 0;
+      transform: translateY(3rem);
+      transition: opacity 0.6s cubic-bezier(0.32, 0.72, 0, 1),
+                  transform 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .nav-overlay.active .nav-link:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 80ms; }
+    .nav-overlay.active .nav-link:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 140ms; }
+    .nav-overlay.active .nav-link:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 200ms; }
+    .nav-overlay.active .nav-link:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 260ms; }
+    .nav-overlay.active .nav-link:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 320ms; }
+
+    /* Sticky CTA */
+    .sticky-cta {
+      opacity: 0;
+      transform: translateY(1rem);
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1),
+                  transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .sticky-cta.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+  </style>
+</head>
+<body class="bg-cream text-charcoal noise">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STANDALONE LOGO (visible at top, fades out on scroll) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <a href="#hero" id="standaloneLogo" class="fixed top-6 left-6 md:left-10 z-40 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]">
+    <img src="src/assets/logo-transparent.png" alt="Clario" class="h-10 md:h-14">
+  </a>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FLOATING NAV -->
+  <!-- ═══════════════════════════════════════════ -->
+  <nav id="mainNav" class="fixed top-0 left-0 right-0 z-40 flex justify-center pt-5 px-4">
+    <div id="navPill" class="flex items-center gap-6 md:gap-10 bg-white/70 backdrop-blur-2xl rounded-full px-5 py-3 md:px-8 md:py-3.5 ring-1 ring-black/[0.04] shadow-[0_4px_30px_rgba(0,0,0,0.04)] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]">
+      <a href="#hero" id="pillLogo" class="flex items-center gap-2 overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] w-0 opacity-0">
+        <img src="src/assets/logo-transparent.png" alt="Clario" class="h-7 md:h-8 min-w-max">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#process" class="text-[13px] font-medium tracking-wide text-muted hover:text-charcoal transition-colors duration-500 ease-spring">Process</a>
+        <a href="#services" class="text-[13px] font-medium tracking-wide text-muted hover:text-charcoal transition-colors duration-500 ease-spring">Services</a>
+        <a href="#programme" class="text-[13px] font-medium tracking-wide text-muted hover:text-charcoal transition-colors duration-500 ease-spring">Programme</a>
+        <a href="#booking" class="text-[13px] font-medium tracking-wide text-muted hover:text-charcoal transition-colors duration-500 ease-spring">Book</a>
+      </div>
+      <a href="#booking" class="hidden md:flex group items-center gap-2 bg-charcoal text-cream rounded-full pl-5 pr-1.5 py-1.5 text-[13px] font-medium transition-all duration-500 ease-spring hover:shadow-[0_8px_30px_rgba(26,26,46,0.2)] active:scale-[0.97]">
+        <span>Clario Fit (£50)</span>
+        <span class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-500 ease-spring group-hover:translate-x-0.5 group-hover:-translate-y-px group-hover:scale-105">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+        </span>
+      </a>
+      <!-- Mobile hamburger -->
+      <button id="hamburger" class="md:hidden relative w-7 h-7 flex flex-col items-center justify-center gap-1.5" aria-label="Menu">
+        <span class="hamburger-line w-5 h-px bg-charcoal transition-all duration-500 ease-spring origin-center"></span>
+        <span class="hamburger-line w-5 h-px bg-charcoal transition-all duration-500 ease-spring origin-center"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile overlay -->
+  <div id="navOverlay" class="nav-overlay fixed inset-0 z-30 bg-cream/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-8">
+    <a href="#process" class="nav-link text-3xl font-serif font-medium text-charcoal" onclick="closeNav()">Process</a>
+    <a href="#services" class="nav-link text-3xl font-serif font-medium text-charcoal" onclick="closeNav()">Services</a>
+    <a href="#programme" class="nav-link text-3xl font-serif font-medium text-charcoal" onclick="closeNav()">Programme</a>
+    <a href="#booking" class="nav-link text-3xl font-serif font-medium text-charcoal" onclick="closeNav()">Book</a>
+    <a href="#booking" class="nav-link group flex items-center gap-3 bg-charcoal text-cream rounded-full pl-7 pr-2 py-3 text-base font-medium mt-4 transition-all duration-500 ease-spring active:scale-[0.97]" onclick="closeNav()">
+      <span>Clario Fit (£50)</span>
+      <span class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
+        <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+      </span>
+    </a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 1: HERO -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="hero" class="min-h-[100dvh] flex items-center relative overflow-hidden">
+    <div class="w-full max-w-7xl mx-auto px-5 md:px-10 pt-32 pb-24 md:pt-0 md:pb-0">
+      <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+        <!-- Left: Copy -->
+        <div class="w-full md:w-1/2 stagger">
+          <div class="reveal">
+            <span class="inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender bg-lavender/10 ring-1 ring-lavender/15 mb-8">Identity Consulting</span>
+          </div>
+          <h1 class="reveal font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[1.05] font-medium tracking-tight mb-6">
+            The science of<br>becoming <em class="text-lavender not-italic">yourself</em>
+          </h1>
+          <p class="reveal text-lg md:text-xl text-muted font-light leading-relaxed max-w-md mb-4">
+            For high-functioning individuals who feel stressed, overworked, and not like themselves.
+          </p>
+          <p class="reveal text-base text-muted/70 font-light leading-relaxed max-w-sm mb-10">
+            You're functioning. But something is off.<br>
+            Clario helps you understand why, and what to do about it.
+          </p>
+          <div class="reveal">
+            <a href="#booking" class="group inline-flex items-center gap-3 bg-charcoal text-cream rounded-full pl-7 pr-2 py-2.5 text-[15px] font-medium transition-all duration-700 ease-spring hover:shadow-[0_12px_40px_rgba(26,26,46,0.18)] active:scale-[0.97]">
+              <span>Book Clario Fit (£50)</span>
+              <span class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-700 ease-spring group-hover:translate-x-1 group-hover:-translate-y-px group-hover:scale-110">
+                <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+        <!-- Right: Hero Image -->
+        <div class="w-full md:w-1/2 reveal">
+          <div class="bg-black/[0.03] ring-1 ring-black/[0.04] p-2 rounded-[2.5rem]">
+            <img src="src/assets/image1.png" alt="Clario: identity consulting in a calm, composed environment" class="w-full rounded-[calc(2.5rem-0.5rem)] img-clinical object-cover aspect-[4/5] md:aspect-[3/4]">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 2: PROBLEM -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="py-28 md:py-40 bg-white">
+    <div class="max-w-7xl mx-auto px-5 md:px-10">
+      <div class="flex flex-col md:flex-row gap-16 md:gap-24 items-start">
+        <div class="w-full md:w-5/12 reveal">
+          <div class="bg-black/[0.03] ring-1 ring-black/[0.04] p-1.5 rounded-[2rem]">
+            <img src="src/assets/image2.png" alt="Reflective workspace" class="w-full rounded-[calc(2rem-0.375rem)] img-clinical object-cover aspect-[3/4]">
+          </div>
+        </div>
+        <div class="w-full md:w-7/12 md:pt-12 stagger">
+          <span class="reveal inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-muted bg-black/[0.04] mb-8">The disconnect</span>
+          <h2 class="reveal font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] font-medium tracking-tight mb-10">
+            You're doing well<br>on the outside
+          </h2>
+          <div class="space-y-6 max-w-lg">
+            <p class="reveal text-lg text-muted font-light leading-relaxed">
+              But internally, something doesn't align. You're tired, overextended, and disconnected from yourself.
+            </p>
+            <p class="reveal text-lg text-muted font-light leading-relaxed">
+              You can't explain it clearly, but you feel it.
+            </p>
+            <p class="reveal text-lg text-muted font-light leading-relaxed">
+              The roles you play, the pace you keep, the version of you everyone sees. None of it quite matches who you are underneath.
+            </p>
+            <p class="reveal text-base text-charcoal font-medium leading-relaxed mt-8">
+              That gap between performance and identity is where Clario begins.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 3: POSITIONING: IDENTITY ARCHITECT -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="py-28 md:py-40">
+    <div class="max-w-7xl mx-auto px-5 md:px-10">
+      <div class="flex flex-col md:flex-row-reverse gap-16 md:gap-24 items-center">
+        <div class="w-full md:w-5/12 reveal">
+          <div class="bg-black/[0.03] ring-1 ring-black/[0.04] p-1.5 rounded-[2rem]">
+            <img src="src/assets/image3.png" alt="Identity Architect" class="w-full rounded-[calc(2rem-0.375rem)] img-clinical object-cover aspect-[4/5]">
+          </div>
+        </div>
+        <div class="w-full md:w-7/12 stagger">
+          <span class="reveal inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender bg-lavender/10 ring-1 ring-lavender/15 mb-8">Identity Architect</span>
+          <h2 class="reveal font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] font-medium tracking-tight mb-10">
+            Not coaching.<br><em class="text-lavender not-italic">Architecture.</em>
+          </h2>
+          <div class="space-y-6 max-w-lg">
+            <p class="reveal text-lg text-muted font-light leading-relaxed">
+              This is not general life coaching. Clario works with identity, patterns, and structure.
+            </p>
+            <p class="reveal text-lg text-muted font-light leading-relaxed">
+              Understanding how you operate. Where misalignment comes from. What actually needs to change, and what doesn't.
+            </p>
+            <p class="reveal text-base text-charcoal font-medium leading-relaxed">
+              Precision over inspiration. Clarity over motivation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 4: PROCESS -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="process" class="py-28 md:py-40 bg-white">
+    <div class="max-w-7xl mx-auto px-5 md:px-10">
+      <div class="text-center max-w-2xl mx-auto mb-20 stagger">
+        <span class="reveal inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-muted bg-black/[0.04] mb-8">The Process</span>
+        <h2 class="reveal font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] font-medium tracking-tight">
+          Three steps to clarity
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 stagger">
+        <!-- Step 1 -->
+        <div class="reveal">
+          <div class="bg-black/[0.025] ring-1 ring-black/[0.04] p-2 rounded-[2rem]">
+            <div class="bg-cream rounded-[calc(2rem-0.5rem)] p-8 md:p-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] min-h-[280px] flex flex-col">
+              <span class="text-[11px] uppercase tracking-[0.2em] font-semibold text-lavender mb-6">01</span>
+              <h3 class="font-serif text-2xl md:text-[1.75rem] font-medium mb-4">Understand your patterns</h3>
+              <p class="text-muted font-light leading-relaxed mt-auto">Map the behaviours, decisions, and cycles that define how you currently operate.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="reveal">
+          <div class="bg-black/[0.025] ring-1 ring-black/[0.04] p-2 rounded-[2rem]">
+            <div class="bg-cream rounded-[calc(2rem-0.5rem)] p-8 md:p-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] min-h-[280px] flex flex-col">
+              <span class="text-[11px] uppercase tracking-[0.2em] font-semibold text-lavender mb-6">02</span>
+              <h3 class="font-serif text-2xl md:text-[1.75rem] font-medium mb-4">Define your starting point</h3>
+              <p class="text-muted font-light leading-relaxed mt-auto">Establish where you are honestly, not where you think you should be.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="reveal">
+          <div class="bg-black/[0.025] ring-1 ring-black/[0.04] p-2 rounded-[2rem]">
+            <div class="bg-cream rounded-[calc(2rem-0.5rem)] p-8 md:p-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] min-h-[280px] flex flex-col">
+              <span class="text-[11px] uppercase tracking-[0.2em] font-semibold text-lavender mb-6">03</span>
+              <h3 class="font-serif text-2xl md:text-[1.75rem] font-medium mb-4">Move forward with clarity</h3>
+              <p class="text-muted font-light leading-relaxed mt-auto">Build direction from understanding, not urgency, not pressure, not performance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 5: SERVICES -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="services" class="py-28 md:py-40">
+    <div class="max-w-7xl mx-auto px-5 md:px-10">
+      <div class="text-center max-w-2xl mx-auto mb-20 stagger">
+        <span class="reveal inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-muted bg-black/[0.04] mb-8">Services</span>
+        <h2 class="reveal font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] font-medium tracking-tight">
+          Choose your path
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 stagger">
+        <!-- Clario Fit -->
+        <div class="reveal">
+          <div class="bg-charcoal/[0.04] ring-1 ring-charcoal/[0.06] p-2 rounded-[2rem]">
+            <div class="bg-white rounded-[calc(2rem-0.5rem)] p-8 md:p-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] flex flex-col min-h-[420px]">
+              <span class="inline-block rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-cream bg-charcoal w-max mb-6">Recommended</span>
+              <h3 class="font-serif text-2xl md:text-3xl font-medium mb-2">Clario Fit</h3>
+              <p class="font-serif text-4xl md:text-5xl font-medium text-charcoal mb-6">£50</p>
+              <ul class="space-y-3 text-muted font-light text-[15px] mb-10 flex-1">
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Structured consultation
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Assess alignment
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Define starting point
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Experience working together
+                </li>
+              </ul>
+              <a href="#booking" class="group flex items-center justify-center gap-2 bg-charcoal text-cream rounded-full py-3.5 text-[14px] font-medium transition-all duration-700 ease-spring hover:shadow-[0_8px_30px_rgba(26,26,46,0.18)] active:scale-[0.97]">
+                <span>Book Now</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Individual Session -->
+        <div class="reveal">
+          <div class="bg-black/[0.025] ring-1 ring-black/[0.04] p-2 rounded-[2rem]">
+            <div class="bg-white rounded-[calc(2rem-0.5rem)] p-8 md:p-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] flex flex-col min-h-[420px]">
+              <div class="mb-6 h-6"></div>
+              <h3 class="font-serif text-2xl md:text-3xl font-medium mb-2">Individual Session</h3>
+              <p class="font-serif text-4xl md:text-5xl font-medium text-charcoal mb-6">£162</p>
+              <ul class="space-y-3 text-muted font-light text-[15px] mb-10 flex-1">
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Ongoing support
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Pattern work + clarity
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Flexible scheduling
+                </li>
+              </ul>
+              <a href="#booking" class="group flex items-center justify-center gap-2 bg-sand text-charcoal rounded-full py-3.5 text-[14px] font-medium ring-1 ring-black/[0.06] transition-all duration-700 ease-spring hover:bg-warm active:scale-[0.97]">
+                <span>Book Session</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Clario Core Eight -->
+        <div class="reveal">
+          <div class="bg-black/[0.025] ring-1 ring-black/[0.04] p-2 rounded-[2rem]">
+            <div class="bg-white rounded-[calc(2rem-0.5rem)] p-8 md:p-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] flex flex-col min-h-[420px]">
+              <div class="mb-6 h-6"></div>
+              <h3 class="font-serif text-2xl md:text-3xl font-medium mb-2">Clario Core Eight</h3>
+              <p class="font-serif text-4xl md:text-5xl font-medium text-charcoal mb-6">£1,200</p>
+              <ul class="space-y-3 text-muted font-light text-[15px] mb-10 flex-1">
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Structured 8-session programme
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Defined progression
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-1 h-1 rounded-full bg-lavender mt-2.5 shrink-0"></span>
+                  Misalignment → clarity + direction
+                </li>
+              </ul>
+              <a href="#booking" class="group flex items-center justify-center gap-2 bg-sand text-charcoal rounded-full py-3.5 text-[14px] font-medium ring-1 ring-black/[0.06] transition-all duration-700 ease-spring hover:bg-warm active:scale-[0.97]">
+                <span>Apply</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 6: PROGRAMME: CLARIO CORE EIGHT -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="programme" class="py-28 md:py-40 bg-charcoal text-cream">
+    <div class="max-w-7xl mx-auto px-5 md:px-10">
+      <div class="flex flex-col md:flex-row gap-16 md:gap-24 items-center">
+        <div class="w-full md:w-1/2 stagger">
+          <span class="reveal inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender-soft bg-white/[0.06] ring-1 ring-white/[0.08] mb-8">Clario Core Eight</span>
+          <h2 class="reveal font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] font-medium tracking-tight mb-10">
+            From misalignment<br>to <em class="text-lavender-soft not-italic">direction</em>
+          </h2>
+          <div class="reveal grid grid-cols-2 gap-x-10 gap-y-8">
+            <div>
+              <p class="text-[11px] uppercase tracking-[0.2em] font-semibold text-white/40 mb-4">Start state</p>
+              <ul class="space-y-2.5 text-white/60 font-light text-[15px]">
+                <li>Stressed</li>
+                <li>Overworked</li>
+                <li>Disconnected</li>
+                <li>High-functioning but misaligned</li>
+              </ul>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase tracking-[0.2em] font-semibold text-lavender-soft mb-4">End state</p>
+              <ul class="space-y-2.5 text-white/80 font-light text-[15px]">
+                <li>Clear on who you are</li>
+                <li>Understand your patterns</li>
+                <li>Know what needs to change</li>
+                <li>Defined path forward</li>
+              </ul>
+            </div>
+          </div>
+          <div class="reveal mt-12">
+            <a href="#booking" class="group inline-flex items-center gap-3 bg-cream text-charcoal rounded-full pl-7 pr-2 py-2.5 text-[15px] font-medium transition-all duration-700 ease-spring hover:shadow-[0_12px_40px_rgba(253,251,247,0.15)] active:scale-[0.97]">
+              <span>Start the programme</span>
+              <span class="w-9 h-9 rounded-full bg-charcoal/10 flex items-center justify-center transition-transform duration-700 ease-spring group-hover:translate-x-1 group-hover:-translate-y-px group-hover:scale-110">
+                <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 reveal">
+          <div class="bg-white/[0.05] ring-1 ring-white/[0.08] p-2 rounded-[2.5rem]">
+            <img src="src/assets/image4.png" alt="Clario Core Eight programme" class="w-full rounded-[calc(2.5rem-0.5rem)] img-clinical object-cover aspect-[4/5]">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 7: BOOKING (CALENDLY) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="booking" class="py-28 md:py-40 bg-white">
+    <div class="max-w-4xl mx-auto px-5 md:px-10">
+      <div class="text-center mb-16 stagger">
+        <span class="reveal inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-lavender bg-lavender/10 ring-1 ring-lavender/15 mb-8">Book Your Session</span>
+        <h2 class="reveal font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] font-medium tracking-tight mb-4">
+          Clario Fit (£50)
+        </h2>
+        <p class="reveal text-lg text-muted font-light max-w-md mx-auto">
+          A structured consultation to assess alignment and define your starting point.
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="bg-black/[0.025] ring-1 ring-black/[0.04] p-2 rounded-[2rem]">
+          <div class="bg-cream rounded-[calc(2rem-0.5rem)] p-4 md:p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] min-h-[500px] flex items-center justify-center">
+            <!-- Replace this placeholder with your Calendly embed -->
+            <div class="text-center py-20 w-full">
+              <p class="text-muted text-sm mb-6">Calendly scheduling will appear here</p>
+              <!-- Uncomment and replace YOUR_CALENDLY_URL with your actual Calendly link -->
+              <!--
+              <div class="calendly-inline-widget" data-url="YOUR_CALENDLY_URL" style="min-width:320px;height:630px;"></div>
+              <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+              -->
+              <a href="#" class="group inline-flex items-center gap-3 bg-charcoal text-cream rounded-full pl-7 pr-2 py-3 text-[15px] font-medium transition-all duration-700 ease-spring hover:shadow-[0_12px_40px_rgba(26,26,46,0.18)] active:scale-[0.97]">
+                <span>Open Booking Calendar</span>
+                <span class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-700 ease-spring group-hover:translate-x-1 group-hover:-translate-y-px group-hover:scale-110">
+                  <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 8: POLICY -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="py-24 md:py-32">
+    <div class="max-w-5xl mx-auto px-5 md:px-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 stagger">
+        <div class="reveal">
+          <div class="bg-black/[0.02] ring-1 ring-black/[0.04] p-1.5 rounded-[1.5rem]">
+            <div class="bg-white rounded-[calc(1.5rem-0.375rem)] p-7 md:p-8 text-center">
+              <div class="w-10 h-10 rounded-full bg-lavender/10 flex items-center justify-center mx-auto mb-5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9B8FB4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h4 class="font-medium text-sm mb-2">24-Hour Cancellation</h4>
+              <p class="text-muted font-light text-[13px] leading-relaxed">Cancel up to 24 hours before your session at no charge.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="bg-black/[0.02] ring-1 ring-black/[0.04] p-1.5 rounded-[1.5rem]">
+            <div class="bg-white rounded-[calc(1.5rem-0.375rem)] p-7 md:p-8 text-center">
+              <div class="w-10 h-10 rounded-full bg-lavender/10 flex items-center justify-center mx-auto mb-5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9B8FB4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <h4 class="font-medium text-sm mb-2">Flexible Rescheduling</h4>
+              <p class="text-muted font-light text-[13px] leading-relaxed">Reschedule your session with at least 24 hours notice.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="bg-black/[0.02] ring-1 ring-black/[0.04] p-1.5 rounded-[1.5rem]">
+            <div class="bg-white rounded-[calc(1.5rem-0.375rem)] p-7 md:p-8 text-center">
+              <div class="w-10 h-10 rounded-full bg-lavender/10 flex items-center justify-center mx-auto mb-5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9B8FB4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h4 class="font-medium text-sm mb-2">Missed Sessions</h4>
+              <p class="text-muted font-light text-[13px] leading-relaxed">Missed sessions without prior notice are non-refundable.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 9: ABOUT + SOCIAL PROOF BRIDGE -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="py-28 md:py-40 bg-white">
+    <div class="max-w-7xl mx-auto px-5 md:px-10">
+      <div class="flex flex-col md:flex-row gap-16 md:gap-24 items-center">
+        <div class="w-full md:w-5/12 reveal">
+          <div class="bg-black/[0.03] ring-1 ring-black/[0.04] p-1.5 rounded-[2rem]">
+            <img src="src/assets/image5.jpeg" alt="Clario Identity Architect" class="w-full rounded-[calc(2rem-0.375rem)] img-clinical object-cover aspect-[4/5]">
+          </div>
+        </div>
+        <div class="w-full md:w-7/12 stagger">
+          <span class="reveal inline-block rounded-full px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold text-muted bg-black/[0.04] mb-8">Behind Clario</span>
+          <blockquote class="reveal font-serif text-[clamp(1.5rem,3vw,2.5rem)] leading-[1.2] font-medium tracking-tight mb-8 max-w-lg">
+            Clario is led by an Identity Architect focused on structured self-understanding.
+          </blockquote>
+          <p class="reveal text-muted font-light text-lg max-w-md mb-10">
+            The work is precise, pattern-driven, and grounded in how identity actually operates, not how it's marketed.
+          </p>
+          <div class="reveal">
+            <a href="https://instagram.com" target="_blank" rel="noopener" class="group inline-flex items-center gap-3 bg-sand text-charcoal rounded-full pl-6 pr-2 py-2.5 text-[14px] font-medium ring-1 ring-black/[0.06] transition-all duration-700 ease-spring hover:bg-warm active:scale-[0.97]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span>Follow on Instagram</span>
+              <span class="w-7 h-7 rounded-full bg-black/[0.05] flex items-center justify-center transition-transform duration-700 ease-spring group-hover:translate-x-0.5 group-hover:-translate-y-px group-hover:scale-105">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 10: FINAL CTA -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="py-32 md:py-48">
+    <div class="max-w-3xl mx-auto px-5 md:px-10 text-center stagger">
+      <h2 class="reveal font-serif text-[clamp(2rem,5vw,4rem)] leading-[1.1] font-medium tracking-tight mb-6">
+        You don't need more<br>information.
+      </h2>
+      <p class="reveal font-serif text-[clamp(1.25rem,3vw,2rem)] leading-[1.3] text-lavender font-medium mb-12">
+        You need clarity on where to start.
+      </p>
+      <div class="reveal">
+        <a href="#booking" class="group inline-flex items-center gap-3 bg-charcoal text-cream rounded-full pl-8 pr-2.5 py-3.5 text-lg font-medium transition-all duration-700 ease-spring hover:shadow-[0_16px_50px_rgba(26,26,46,0.2)] active:scale-[0.97]">
+          <span>Book Clario Fit (£50)</span>
+          <span class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-700 ease-spring group-hover:translate-x-1 group-hover:-translate-y-px group-hover:scale-110">
+            <svg width="16" height="16" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FOOTER -->
+  <!-- ═══════════════════════════════════════════ -->
+  <footer class="py-12 border-t border-black/[0.05]">
+    <div class="max-w-7xl mx-auto px-5 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <img src="src/assets/logo-transparent.png" alt="Clario" class="h-6 opacity-60">
+      <p class="text-[12px] text-muted/60 font-light">© 2026 Clario. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STICKY MOBILE CTA -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="stickyCta" class="sticky-cta fixed bottom-6 left-4 right-4 z-40 md:hidden">
+    <a href="#booking" class="group flex items-center justify-center gap-2 bg-charcoal text-cream rounded-full py-4 text-[15px] font-medium shadow-[0_8px_40px_rgba(26,26,46,0.25)] transition-all duration-500 ease-spring active:scale-[0.97]">
+      <span>Book Clario Fit (£50)</span>
+      <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg>
+    </a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCRIPTS -->
+  <!-- ═══════════════════════════════════════════ -->
+  <script>
+    // Scroll reveal with IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('navOverlay');
+    const lines = hamburger.querySelectorAll('.hamburger-line');
+    let navOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      navOpen = !navOpen;
+      overlay.classList.toggle('active', navOpen);
+      if (navOpen) {
+        lines[0].style.transform = 'rotate(45deg) translateY(4px)';
+        lines[1].style.transform = 'rotate(-45deg) translateY(-4px)';
+      } else {
+        lines[0].style.transform = '';
+        lines[1].style.transform = '';
+      }
+    });
+
+    function closeNav() {
+      navOpen = false;
+      overlay.classList.remove('active');
+      lines[0].style.transform = '';
+      lines[1].style.transform = '';
+    }
+
+    // Sticky CTA visibility (show after scrolling past hero)
+    const hero = document.getElementById('hero');
+    const stickyCta = document.getElementById('stickyCta');
+    const stickyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        stickyCta.classList.toggle('show', !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    stickyObserver.observe(hero);
+
+    // Logo swap: standalone → pill on scroll
+    const standaloneLogo = document.getElementById('standaloneLogo');
+    const pillLogo = document.getElementById('pillLogo');
+    let logoScrolled = false;
+
+    const logoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const scrolledPast = !entry.isIntersecting;
+        if (scrolledPast === logoScrolled) return;
+        logoScrolled = scrolledPast;
+
+        if (scrolledPast) {
+          // Hide standalone, reveal pill logo
+          standaloneLogo.style.opacity = '0';
+          standaloneLogo.style.transform = 'translateY(-1rem) scale(0.85)';
+          standaloneLogo.style.pointerEvents = 'none';
+          pillLogo.style.width = '';
+          pillLogo.style.opacity = '1';
+          pillLogo.classList.remove('w-0', 'opacity-0');
+          pillLogo.classList.add('w-auto', 'opacity-100');
+        } else {
+          // Show standalone, hide pill logo
+          standaloneLogo.style.opacity = '1';
+          standaloneLogo.style.transform = 'translateY(0) scale(1)';
+          standaloneLogo.style.pointerEvents = 'auto';
+          pillLogo.classList.remove('w-auto', 'opacity-100');
+          pillLogo.classList.add('w-0', 'opacity-0');
+        }
+      });
+    }, { threshold: 0, rootMargin: '-80px 0px 0px 0px' });
+
+    // Observe a sentinel at the top of the hero
+    const logoSentinel = document.createElement('div');
+    logoSentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:80px;pointer-events:none;';
+    hero.style.position = 'relative';
+    hero.appendChild(logoSentinel);
+    logoObserver.observe(logoSentinel);
+  </script>
+</body>
+</html>
